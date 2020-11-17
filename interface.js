@@ -110,3 +110,7 @@ JavascriptInterface.prototype.setImplementation = function(cls, interfaceName, f
     throw "InvalidArgumentException";
   }
 };
+
+if (typeof module !== 'undefined') {
+    module.exports = JavascriptInterface;
+}

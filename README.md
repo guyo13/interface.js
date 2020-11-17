@@ -19,6 +19,9 @@ interface Person {
 is possible:
 
 ```javascript
+/// If using Node js first run:
+/// const JavascriptInterface = require("interfaces.js");
+
 /// Create a JavascriptInterface called [Person]
 const Person = new JavascriptInterface(["talk", "walk", "getFullName"]);
 
@@ -122,3 +125,9 @@ for (const person of people) {
 // The Great Merlin is walking!
 // The Great Merlin is talking!
 ```
+ ### Node JS
+ First run:
+ ```javascript
+ const JavascriptInterface = require("interfaces.js");
+ ```
+ Then you can run the example above.
