@@ -1,0 +1,28 @@
+{
+  "name": "interface.js",
+  "version": "1.0.0",
+  "description": "Create runtime Interfaces in JavaScript",
+  "main": "interface.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/guyo13/interface.js.git"
+  },
+  "keywords": [
+    "javascript",
+    "ECMAscript",
+    "oop",
+    "objectoriented",
+    "interface",
+    "class",
+    "inheritance"
+  ],
+  "author": "Guy Or",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/guyo13/interface.js/issues"
+  },
+  "homepage": "https://github.com/guyo13/interface.js#readme"
+}
