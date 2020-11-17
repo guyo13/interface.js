@@ -125,9 +125,10 @@ for (const person of people) {
 // The Great Merlin is walking!
 // The Great Merlin is talking!
 ```
- ### Node JS
- First run:
- ```javascript
- const JavascriptInterface = require("interfaces.js");
- ```
- Then you can run the example above.
+
+### Node JS
+First run:
+```javascript
+const JavascriptInterface = require("interfaces.js");
+```
+Then you can run the example above.
