@@ -1,5 +1,5 @@
 {
-  "name": "interface.js",
+  "name": "interfaces.js",
   "version": "1.0.0",
   "description": "Create runtime Interfaces in JavaScript",
   "main": "interface.js",
