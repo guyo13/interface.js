@@ -8,6 +8,10 @@ function JavascriptInterface(interfaces=[]) {
     throw `InvalidArgumentException - expected a Set or an Array, got '${interfaces.toString()}'`;
   }
 
+  const interfaceSet = new Set(interfaces);
+  // Add the "__isobjectinstance__" builtin interface
+  interfaceSet.add("__isobjectinstance__");
+
   /// A map where keys are function types ("classes") and values are Objects containing
   /// the different interfaces implementations which are registered at Runtime by users' Javascript code
   /// using [JavascriptInterface.prototype.setImplementation()]
@@ -20,12 +24,12 @@ function JavascriptInterface(interfaces=[]) {
 
   /// Defines a set of supported interfaces
   Object.defineProperty(this, "interfaces", {
-    value: new Set(interfaces),
+    value: interfaceSet,
     writable: false,
     enumerable: true,
     configurable: false,
   });
-}
+};
 
 Object.defineProperty(JavascriptInterface.prototype, "typeFunction", {
   value: "function",
@@ -109,6 +113,52 @@ JavascriptInterface.prototype.setImplementation = function(cls, interfaceName, f
   } else {
     throw "InvalidArgumentException";
   }
+};
+
+/// Sets an implementation of the "__isobjectinstance__" interface, a function that takes
+/// a plain JavaScript object and returns a Boolean indicating whether that object is
+/// a valid representation of [cls]. Useful in serialization -> deserialization
+/// [cls] - The JavaScript "class" (function type)
+/// [func] - A function that implements the "__isobjectinstance__" interface
+JavascriptInterface.prototype.setIsObjectInstance = function(cls, func) {
+  this.setImplementation(cls, "__isobjectinstance__", func);
+};
+
+/// Returns a Boolean indicating whether that object is a valid representation of [cls].
+/// [cls] - The JavaScript "class" (function type)
+/// [object] - Either a plain JavaScript object or an object created with a function constructor (`new Func();`)
+JavascriptInterface.prototype.isObjectInstance = function(object, cls) {
+  // If [object] is an instance of [cls] return immediately
+  if ( (object instanceof cls) ) {
+    return true;
+  }
+  // Else try to get an implementation and check it
+  const impl = this.getImplementation(cls, "__isobjectinstance__");
+  if (impl != undefined) {
+    if (typeof impl != JavascriptInterface.prototype.typeFunction) {
+      throw `InvalidStateException - __isobjectinstance__ implementation is not a function.`;
+    }
+    return impl(object);
+  }
+  // Finally if no implementation found return false
+  return false;
+};
+
+
+/// Returns the class of an object based on evaluating the implementations of the "__isobjectinstance__" interface.
+/// [object] - Either a plain JavaScript object or an object created with a function constructor (`new Func();`)
+JavascriptInterface.prototype.classOfObject = function(object) {
+  const objectType = typeof object;
+  if ( JavascriptInterface.prototype.dataTypes.has(objectType) || (object === null) ) {
+    return objectType;
+  }
+  for (const [cls, impls] of this.classMap) {
+    if (this.isObjectInstance(object, cls)) {
+      return cls;
+    }
+  }
+  // If no class found, return the type
+  return objectType;
 };
 
 if (typeof module !== 'undefined') {

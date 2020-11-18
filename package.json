@@ -1,6 +1,6 @@
 {
   "name": "interfaces.js",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Create runtime Interfaces in JavaScript",
   "main": "interface.js",
   "scripts": {

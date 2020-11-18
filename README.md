@@ -101,7 +101,7 @@ Person.setImplementation(UglyPerson, "getFullName", function(uglyPerson) {
 });
 
 /// Use the [Person] interface to operate on an Array of different people
-const people = [new GoodPerson("Geralt", "of Rivia"), new BadPerson("Lucifer"), new UglyPerson("Zarathustra"), "The Great Merlin"];
+let people = [new GoodPerson("Geralt", "of Rivia"), new BadPerson("Lucifer"), new UglyPerson("Zarathustra"), "The Great Merlin"];
 
 for (const person of people) {
   console.log(`Full Name: ${Person.getFullNameImpl(person)(person)}`);
@@ -126,9 +126,69 @@ for (const person of people) {
 // The Great Merlin is talking!
 ```
 
-### Node JS
+### Finding the class of an object
+
+#### Implementing the `__isobjectinstance__` interface
+
+Continuing the previous example, the `setIsObjectInstance` method allows you to set a method that takes an object and returns a Boolean,
+indicating whether that object is an instance of the class:
+
+```javascript
+Person.setIsObjectInstance(GoodPerson, function(obj) {
+  // Checks that [obj] has two keys "firstName" and "lastName"
+  const keys = Object.keys(obj);
+  return keys.length == 2 &&
+         keys.indexOf("firstName") > -1 &&
+         keys.indexOf("lastName") > -1;
+});
+
+Person.setIsObjectInstance(BadPerson, function(obj) {
+  // Checks that [obj] has only the "nickname" key
+  const keys = Object.keys(obj);
+  return keys.length == 1 &&
+         keys.indexOf("nickname") > -1;
+});
+
+Person.setIsObjectInstance(UglyPerson, function(obj) {
+  // Checks that [obj] has only the "name" key
+  const keys = Object.keys(obj);
+  return keys.length == 1 &&
+         keys.indexOf("name") > -1;
+});
+
+```
+#### Checking the instance of an object
+
+Use the `JavascriptInterface.prototype.isObjectInstance` method to determine if an object is instance of a given class:
+
+```javascript
+let zara = new UglyPerson("Zarathustra");
+let caveman = {"name": "CAVE MAN"};
+let luci = {"nickname": "Lucifer"};
+/// Output: Zarathustra is ugly...
+console.log(`${Person.getFullNameImpl(zara)(zara)} ${Person.isObjectInstance(zara, UglyPerson) ? "is ugly..." : "is not ugly!"}`);
+
+/// Output: CAVE MAN is ugly...
+console.log(`${caveman.name} ${Person.isObjectInstance(caveman, UglyPerson) ? "is ugly..." : "is not ugly!"}`);
+
+/// Output: Lucifer is not ugly!
+console.log(`${luci.nickname} ${Person.isObjectInstance(luci, UglyPerson) ? "is ugly..." : "is not ugly!"}`);
+```
+Use the `JavascriptInterface.prototype.classOfObject` method to determine the object's class:
+
+```javascript
+let mrgood = {"firstName": "John", "lastName": "Doe"};
+
+console.log(`${zara.name} is an ${Person.classOfObject(zara).name}`);
+console.log(`${caveman.name} is an ${Person.classOfObject(caveman).name}`);
+console.log(`${luci.nickname} is a ${Person.classOfObject(luci).name}`);
+console.log(`${mrgood.firstName + " " + mrgood.lastName} is a ${Person.classOfObject(mrgood).name}`);
+
+```
+
+### Running on Node JS
 First run:
 ```javascript
 const JavascriptInterface = require("interfaces.js");
 ```
-Then you can run the example above.
+Then you can run the examples above.
