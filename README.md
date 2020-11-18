@@ -187,7 +187,12 @@ console.log(`${mrgood.firstName + " " + mrgood.lastName} is a ${Person.classOfOb
 ```
 
 ### Running on Node JS
-First run:
+Install the interfaces.js NPM package:
+```bash
+npm i interfaces.js
+```
+
+In your JS code first run:
 ```javascript
 const JavascriptInterface = require("interfaces.js");
 ```
